@@ -1,0 +1,39 @@
+openapi: 3.0.0
+servers:
+  - url: "http://localhost:4000/v1"
+    description: Server description
+
+info:
+  title: team-management-rest
+  version: 1.0.0
+  description: team Management service
+  contact:
+    email: infos-dev@symbiose.labs
+  license:
+    name: SBT 1.0
+    url: "https://www.licence.symbiose.labs"
+
+tags:
+  - name: team-endpoints
+    description: Operations on base team entities
+
+paths:
+  /v1/teams:
+    $ref: "./teamEndpoints.yml"
+
+components:
+  securitySchemes:
+    implicit:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: "http://localhost/oauth/auth"
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources
+  parameters:
+    $ref: "./coreParams.yml"
+  schemas:
+    $ref: "./schemas.yml"
+  responses:
+    $ref: "./coreResponses.yml"

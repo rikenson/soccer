@@ -1,0 +1,103 @@
+Pagination:
+  type: object
+  required:
+    - pageable
+  properties:
+    pageable:
+      $ref: "#/Pageable"
+    last:
+      type: boolean
+      example: false
+    totalPages:
+      type: integer
+      example: 0
+    totalElements:
+      type: integer
+      example: 0
+    size:
+      type: integer
+      example: 0
+    number:
+      type: integer
+      example: 0
+    sort:
+      $ref: "#/Sort"
+    first:
+      type: boolean
+      example: false
+    numberOfElements:
+      type: integer
+      example: 0
+    empty:
+      type: boolean
+      example: false
+
+Pageable:
+  type: object
+  required:
+    - sort
+  properties:
+    sort:
+      $ref: "#/Sort"
+    offset:
+      type: integer
+      example: 0
+    pageNumber:
+      type: integer
+      example: 0
+    pageSize:
+      type: integer
+      example: 0
+    paged:
+      type: boolean
+      example: true
+    unpaged:
+      type: boolean
+      example: false
+
+Sort:
+  type: object
+  required:
+    - empty
+    - sorted
+    - unsorted
+  properties:
+    empty:
+      type: boolean
+      example: false
+    sorted:
+      type: boolean
+      example: false
+    unsorted:
+      type: boolean
+      example: false
+
+Identity:
+  type: object
+  properties:
+    id:
+      type: string
+      uniqueItems: true
+      example: d815d301-8bae-4dd0-a292-56e0cb7509d6
+
+Audit:
+  allOf:
+    - $ref: "#/Identity"
+  type: object
+  properties:
+    createdAt:
+      type: string
+      format: date-time
+      example: 2017-07-21T17:32:28.000Z
+    updatedAt:
+      type: string
+      format: date-time
+      example: 2017-07-21T17:32:28.000Z
+    createdByUser:
+      type: string
+      uniqueItems: true
+      example: d815d301-8bae-4dd0-a292-56e0cb7509d6
+    modifiedByUser:
+      type: string
+      uniqueItems: true
+      example: d815d301-8bae-4dd0-a292-56e0cb7509d6

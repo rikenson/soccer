@@ -1,0 +1,55 @@
+pageNumber:
+  in: query
+  name: pageNumber
+  description: Number of page that must be returned.
+  required: false
+  schema:
+    type: integer
+    example: 5
+    minimum: 0
+    default: 0
+pageSize:
+  in: query
+  name: pageSize
+  description: Number of items in each page
+  required: false
+  schema:
+    type: integer
+    example: 5
+    minimum: 0
+    maximum: 100
+    default: 10
+orderBy:
+  in: query
+  name: orderBy
+  description: ""
+  required: false
+  schema:
+    type: string
+    example: DESC
+    default: DESC
+preferredField:
+  in: query
+  name: preferredField
+  description: Fields to consider to order the elements.
+  required: false
+  schema:
+    type: string
+    example: id
+    default: id
+id:
+  in: path
+  name: id
+  description: Current entity ID.
+  required: true
+  schema:
+    type: string
+    example: d815d301-8bae-4dd0-a292-56e0cb7509d6
+token:
+  in: header
+  name: token
+  description: security token
+  required: true
+  schema:
+    type: string
+    example: 283jebuiVIVEG&#G#UGFXVVWWVD#h3dndon3j0d1hd119hd&ywyw^YS

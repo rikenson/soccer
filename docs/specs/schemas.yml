@@ -1,0 +1,139 @@
+NewTeamRequest:
+  type: Object
+  required:
+    - name
+    - status
+    - description
+  properties:
+    name:
+      type: string
+      required: true
+      uniqueItems: true
+      example: USD
+    description:
+      type: string
+      required: true
+      example: USD Union Sportif de Drummondville...
+    mascot:
+      type: string
+      example: https://medias.usd.com/images/mascot.jpg
+    status:
+      type: string
+      default: INACTIVE
+      enum:
+        - ACTIVE
+        - INACTIVE
+
+UpdateTeamRequest:
+  allOf:
+#    - $ref: "./coreSchemas.yml#/Audit"
+    - $ref: "#/NewTeamRequest"
+  type: Object
+
+TeamResponse:
+  allOf:
+    - $ref: "#/UpdateTeamRequest"
+  type: Object
+  required:
+    - name
+    - description
+    - players
+    - status
+  properties:
+    players:
+      type: array
+      items:
+        $ref: "#/PlayerResponse"
+
+NewPlayerRequest:
+  type: Object
+  required:
+    - firstname
+    - lastname
+    - gender
+    - position
+  properties:
+    firstname:
+      type: string
+      required: true
+      example: Wisly
+    lastname:
+      type: string
+      required: true
+      example: CLERVILUS
+    photo:
+      type: string
+      example: https://medias.usd.com/images/mascot.jpg
+    gender:
+      type: string
+      required: true
+      default: UNKNOWN
+      enum:
+        - MALE
+        - FEMALE
+        - OTHER
+        - UNKNOWN
+    position:
+      type: string
+      required: true
+      default: FORWARD
+      enum:
+        - FORWARD
+        - MIDDLE_FIELD
+        - DEFENDER
+        - GOALKEEPER
+    characteristics:
+      type: array
+      items:
+        $ref: "#/NewCharacteristicRequest"
+
+UpdatePlayerRequest:
+  allOf:
+#    - $ref: "./coreSchemas.yml#/Audit"
+    - $ref: "#/NewPlayerRequest"
+  type: Object
+
+
+PlayerResponse:
+  allOf:
+    - $ref: "#/UpdatePlayerRequest"
+  type: Object
+  required:
+    - name
+    - description
+    - players
+    - status
+  properties:
+    characteristics:
+      type: array
+      items:
+        $ref: "#/CharacteristicResponse"
+
+
+NewCharacteristicRequest:
+  type: Object
+  required:
+    - name
+    - rate
+  properties:
+    name:
+      type: string
+      required: true
+      uniqueItems: true
+      example: DRIBLE
+    rate:
+      type: decimal
+      required: true
+      example: 0.7
+
+UpdateCharacteristicRequest:
+  allOf:
+#    - $ref: "./coreSchemas.yml#/Audit"
+    - $ref: "#/NewCharacteristicRequest"
+  type: Object
+
+CharacteristicResponse:
+  allOf:
+#    - $ref: "./coreSchemas.yml#/Audit"
+    - $ref: "#/NewCharacteristicRequest"
+  type: Object

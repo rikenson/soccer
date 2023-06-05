@@ -1,0 +1,112 @@
+#___________________________________________________________________________
+#Find page of team
+get:
+  tags:
+    - team-endpoints
+  summary: Fetch pages of teams filtered by criteria.
+  operationId: searchTeams
+  parameters:
+    - $ref: "./coreParams.yml#/token"
+    - $ref: "./coreParams.yml#/pageSize"
+    - $ref: "./coreParams.yml#/pageNumber"
+    - $ref: "./coreParams.yml#/orderBy"
+    - $ref: "./coreParams.yml#/preferredField"
+  responses:
+    "200":
+      description: Found item structure.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./coreSchemas.yml#/Pagination"
+            type: object
+            properties:
+              content:
+                type: array
+                items:
+                  $ref: "./schemas.yml#/TeamResponse"
+    "400":
+      $ref: "./coreResponses.yml#/400APIError"
+    "409":
+      $ref: "./coreResponses.yml#/409APIError"
+    "500":
+      $ref: "./coreResponses.yml#/500APIError"
+
+#___________________________________________________________________________
+#Add brand team
+# post:
+#   tags:
+#     - base-team
+#   summary: Register new team.
+#   operationId: addTeam
+#   description: Add a brand new team
+#   coreParams:
+#     - $ref: "./coreParams.yml#/token"
+#   requestBody:
+#     content:
+#       application/json:
+#         schema:
+#           $ref: "./schemas.yml#/TeamRequest"
+#   coreResponses:
+#     "201":
+#       description: Item created successfully.
+#       content:
+#         application/json:
+#           schema:
+#             $ref: "./schemas.yml#/TeamDto"
+#     "400":
+#       $ref: "./coreResponses.yml#/400APIError"
+#     "409":
+#       $ref: "./coreResponses.yml#/409APIError"
+#     "500":
+#       $ref: "./coreResponses.yml#/500APIError"
+
+# #___________________________________________________________________________
+# #Update Team
+# put:
+#   tags:
+#     - base-team
+#   summary: Update a specific team by id.
+#   operationId: updateTeam
+#   security: []
+#   coreParams:
+#     - $ref: "./coreParams.yml#/token"
+#     - $ref: "./coreParams.yml#/id"
+#   requestBody:
+#     content:
+#       application/json:
+#         schema:
+#           $ref: "./schemas.yml#/TeamDto"
+#   coreResponses:
+#     "200":
+#       description: Found item structure.
+#       content:
+#         application/json:
+#           schema:
+#             $ref: "./schemas.yml#/TeamDto"
+#     "400":
+#       $ref: ".coreResponses.yml/400APIError"
+#     "409":
+#       $ref: "./coreResponses.yml#/409APIError"
+#     "500":
+#       $ref: "./coreResponses.yml#/500APIError"
+
+# #___________________________________________________________________________
+# #Delete Team
+# delete:
+#   tags:
+#     - base-team
+#   summary: Delete a specific team by id.
+#   operationId: deleteTeam
+#   coreParams:
+#     - $ref: "./coreParams.yml#/token"
+#     - $ref: "./coreParams.yml#/id"
+#   coreResponses:
+#     "200":
+#       $ref: "./coreResponses.yml#/200APIMessage"
+#     "400":
+#       $ref: "./coreResponses.yml#/400APIError"
+#     "409":
+#       $ref: "./coreResponses.yml#/409APIError"
+#     "500":
+#       $ref: "./coreResponses.yml#/500APIError"

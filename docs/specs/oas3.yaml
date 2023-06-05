@@ -1,0 +1,359 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:4000/v1'
+    description: Server description
+info:
+  title: team-management-rest
+  version: 1.0.0
+  description: team Management service
+  contact:
+    email: infos-dev@symbiose.labs
+  license:
+    name: SBT 1.0
+    url: 'https://www.licence.symbiose.labs'
+tags:
+  - name: team-endpoints
+    description: Operations on base team entities
+paths:
+  /v1/teams:
+    get:
+      tags:
+        - team-endpoints
+      summary: Fetch pages of teams filtered by criteria.
+      operationId: searchTeams
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/preferredField'
+      responses:
+        '200':
+          description: Found item structure.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - pageable
+                    properties:
+                      pageable:
+                        type: object
+                        required:
+                          - sort
+                        properties:
+                          sort:
+                            $ref: '#/paths/~1v1~1teams/get/responses/200/content/application~1json/schema/allOf/0/properties/sort'
+                          offset:
+                            type: integer
+                            example: 0
+                          pageNumber:
+                            type: integer
+                            example: 0
+                          pageSize:
+                            type: integer
+                            example: 0
+                          paged:
+                            type: boolean
+                            example: true
+                          unpaged:
+                            type: boolean
+                            example: false
+                      last:
+                        type: boolean
+                        example: false
+                      totalPages:
+                        type: integer
+                        example: 0
+                      totalElements:
+                        type: integer
+                        example: 0
+                      size:
+                        type: integer
+                        example: 0
+                      number:
+                        type: integer
+                        example: 0
+                      sort:
+                        type: object
+                        required:
+                          - empty
+                          - sorted
+                          - unsorted
+                        properties:
+                          empty:
+                            type: boolean
+                            example: false
+                          sorted:
+                            type: boolean
+                            example: false
+                          unsorted:
+                            type: boolean
+                            example: false
+                      first:
+                        type: boolean
+                        example: false
+                      numberOfElements:
+                        type: integer
+                        example: 0
+                      empty:
+                        type: boolean
+                        example: false
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeamResponse'
+        '400':
+          $ref: '#/components/responses/400APIError'
+        '409':
+          $ref: '#/components/responses/409APIError'
+        '500':
+          $ref: '#/components/responses/500APIError'
+components:
+  securitySchemes:
+    implicit:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://localhost/oauth/auth'
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources
+  parameters:
+    pageNumber:
+      in: query
+      name: pageNumber
+      description: Number of page that must be returned.
+      required: false
+      schema:
+        type: integer
+        example: 5
+        minimum: 0
+        default: 0
+    pageSize:
+      in: query
+      name: pageSize
+      description: Number of items in each page
+      required: false
+      schema:
+        type: integer
+        example: 5
+        minimum: 0
+        maximum: 100
+        default: 10
+    orderBy:
+      in: query
+      name: orderBy
+      description: ''
+      required: false
+      schema:
+        type: string
+        example: DESC
+        default: DESC
+    preferredField:
+      in: query
+      name: preferredField
+      description: Fields to consider to order the elements.
+      required: false
+      schema:
+        type: string
+        example: id
+        default: id
+    id:
+      in: path
+      name: id
+      description: Current entity ID.
+      required: true
+      schema:
+        type: string
+        example: d815d301-8bae-4dd0-a292-56e0cb7509d6
+    token:
+      in: header
+      name: token
+      description: security token
+      required: true
+      schema:
+        type: string
+        example: 283jebuiVIVEG&#G#UGFXVVWWVD#h3dndon3j0d1hd119hd&ywyw^YS
+  schemas:
+    NewTeamRequest:
+      type: Object
+      required:
+        - name
+        - status
+        - description
+      properties:
+        name:
+          type: string
+          required: true
+          uniqueItems: true
+          example: USD
+        description:
+          type: string
+          required: true
+          example: USD Union Sportif de Drummondville...
+        mascot:
+          type: string
+          example: 'https://medias.usd.com/images/mascot.jpg'
+        status:
+          type: string
+          default: INACTIVE
+          enum:
+            - ACTIVE
+            - INACTIVE
+    UpdateTeamRequest:
+      allOf:
+        - $ref: '#/components/schemas/NewTeamRequest'
+      type: Object
+    TeamResponse:
+      allOf:
+        - $ref: '#/components/schemas/UpdateTeamRequest'
+      type: Object
+      required:
+        - name
+        - description
+        - players
+        - status
+      properties:
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerResponse'
+    NewPlayerRequest:
+      type: Object
+      required:
+        - firstname
+        - lastname
+        - gender
+        - position
+      properties:
+        firstname:
+          type: string
+          required: true
+          example: Wisly
+        lastname:
+          type: string
+          required: true
+          example: CLERVILUS
+        photo:
+          type: string
+          example: 'https://medias.usd.com/images/mascot.jpg'
+        gender:
+          type: string
+          required: true
+          default: UNKNOWN
+          enum:
+            - MALE
+            - FEMALE
+            - OTHER
+            - UNKNOWN
+        position:
+          type: string
+          required: true
+          default: FORWARD
+          enum:
+            - FORWARD
+            - MIDDLE_FIELD
+            - DEFENDER
+            - GOALKEEPER
+        characteristics:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewCharacteristicRequest'
+    UpdatePlayerRequest:
+      allOf:
+        - $ref: '#/components/schemas/NewPlayerRequest'
+      type: Object
+    PlayerResponse:
+      allOf:
+        - $ref: '#/components/schemas/UpdatePlayerRequest'
+      type: Object
+      required:
+        - name
+        - description
+        - players
+        - status
+      properties:
+        characteristics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicResponse'
+    NewCharacteristicRequest:
+      type: Object
+      required:
+        - name
+        - rate
+      properties:
+        name:
+          type: string
+          required: true
+          uniqueItems: true
+          example: DRIBLE
+        rate:
+          type: decimal
+          required: true
+          example: 0.7
+    UpdateCharacteristicRequest:
+      allOf:
+        - $ref: '#/components/schemas/NewCharacteristicRequest'
+      type: Object
+    CharacteristicResponse:
+      allOf:
+        - $ref: '#/components/schemas/NewCharacteristicRequest'
+      type: Object
+  responses:
+    500APIError:
+      description: This is an unexpected error occurred.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 500
+              message:
+                type: string
+                example: This is an internal server error.
+    400APIError:
+      description: This is a bad request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 400
+              message:
+                type: string
+                example: This is a bad request (Verify requestBody).
+    409APIError:
+      description: An existing item already exists.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 409
+              message:
+                type: string
+                example: An existing item already exists.
+    200APIMessage:
+      description: Operation done successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 200
+              message:
+                type: string
+                example: Operation done successfully.
